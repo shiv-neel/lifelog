@@ -9,14 +9,11 @@ const HydrationWidget = () => {
 		setCups(0)
 	}
 	return (
-		<div className='items-center m-10 min-h-fit'>
-			<Heading as='h1' className='flex justify-center'>
-				Hydrate!
-			</Heading>
-			<div className='flex justify-center items-center gap-10 p-10'>
+		<div className='m-2 min-h-fit'>
+			<div className='flex justify-center items-center gap-10 p-5'>
 				<Bar cups={cups} />
-				<div className=''>
-					<Heading as='h3' className='flex justify-center p-5'>
+				<div className='absolute items-start'>
+					<Heading as='h3' className='flex justify-center p-5 select-none'>
 						{cups}
 					</Heading>
 					<div className='btns flex justify-center gap-3 text-4xl'>
