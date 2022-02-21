@@ -1,12 +1,13 @@
 import React from 'react'
+import { AuthProvider } from '../utils/AuthContext'
 import Navbar from './Navbar'
 
 const Layout: React.FC = ({ children }) => {
 	return (
-		<div>
+		<AuthProvider>
 			<Navbar />
 			{children}
-		</div>
+		</AuthProvider>
 	)
 }
 
