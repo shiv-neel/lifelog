@@ -7,18 +7,21 @@ import firebase, {
 
 import 'firebase/auth'
 
-import {
-	getAuth,
-	User,
-	UserCredential,
-} from 'firebase/auth'
+import { getAuth, User, UserCredential } from 'firebase/auth'
 
 import { getFirestore } from 'firebase/firestore'
 
 export interface AuthType {
 	currentUser: User | null
-	emailSignUp: (email: string, password: string) => Promise<UserCredential | null>
-	googleSignIn: () => Promise<UserCredential | null>
+	emailSignUp: (
+		email: string,
+		password: string
+	) => Promise<UserCredential | null>
+	emailSignIn: (
+		email: string,
+		password: string
+	) => Promise<UserCredential | null | void>
+	googleSignIn: () => Promise<UserCredential | null | void>
 	logout: () => Promise<void>
 }
 

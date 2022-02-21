@@ -8,6 +8,7 @@ import {
 	InputGroup,
 	InputRightElement,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../utils/AuthContext'
 
@@ -28,9 +29,10 @@ const SignUp = () => {
 		else {
 			console.log(email, password)
 			try {
-				signup(email, password).then(res => console.log(res?.user)).catch(err => console.log(err))
-			}
-			catch (error) {
+				signup(email, password)
+					.then((res) => console.log(res?.user))
+					.catch((err) => console.log(err))
+			} catch (error) {
 				console.log(error)
 			}
 		}
@@ -41,7 +43,12 @@ const SignUp = () => {
 			<Heading as='h1'>Sign Up</Heading>
 			<FormControl className='mt-5 space-y-2'>
 				<FormLabel htmlFor='email'>Email</FormLabel>
-				<Input id='email' type='email' placeholder='johndoe@email.com' onChange={(e) => setEmail(e.target.value)}/>
+				<Input
+					id='email'
+					type='email'
+					placeholder='johndoe@email.com'
+					onChange={(e) => setEmail(e.target.value)}
+				/>
 				<FormLabel htmlFor='password'>Password</FormLabel>
 				<InputGroup size='md'>
 					<Input
@@ -59,18 +66,20 @@ const SignUp = () => {
 					</InputRightElement>
 				</InputGroup>
 				<FormLabel htmlFor='confirm-password'>Confirm Pasword</FormLabel>
-					<Input
-						pr='4.5rem'
-						type={show ? 'text' : 'password'}
-						placeholder='Confirm password'
+				<Input
+					pr='4.5rem'
+					type={show ? 'text' : 'password'}
+					placeholder='Confirm password'
 					id='confirm-password'
 					onChange={(e) => setConfirmPassword(e.target.value)}
-					/>
-				<Button type='submit' onClick={submitHandler}>Sign Up</Button>
+				/>
+				<Button type='submit' onClick={submitHandler}>
+					Sign Up
+				</Button>
 				<p>
-					Already have an account? <a href='/SignIn'>Sign In</a>
+					Already have an account? <Link href='/SignIn'>Sign In</Link>
 				</p>
-				{ passwordsMatch ? <></> : <p>Passwords do not match. </p>}
+				{passwordsMatch ? <></> : <p>Passwords do not match. </p>}
 			</FormControl>
 		</Box>
 	)

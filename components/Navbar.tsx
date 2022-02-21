@@ -10,10 +10,12 @@ const Navbar = () => {
 		<nav className='w-full'>
 			<ul className='flex justify-end items-center gap-10 py-12 mr-12'>
 				<li className='mr-auto ml-12'>
-					<a href='/' className='flex items-center text-2xl'>
-						<SiNotion className='text-6xl' />
-						otion
-					</a>
+					<Link href='/'>
+						<div className='flex items-center'>
+							<SiNotion className='text-6xl' />
+							otion++
+						</div>
+					</Link>
 				</li>
 				<li>
 					<Link href='/dashboard'>Dashboard</Link>
@@ -25,10 +27,15 @@ const Navbar = () => {
 					<Link href='/templates'>Templates</Link>
 				</li>
 				<li>
-					{user ? <Button onClick={logout}>Account</Button>:<Button>
-						<Link href='/SignIn'>Sign In</Link>
-					</Button>}
-					
+					{user ? (
+						<Button onClick={logout}>
+							<Link href='/'>Sign Out</Link>
+						</Button>
+					) : (
+						<Button>
+							<Link href='/SignIn'>Sign In</Link>
+						</Button>
+					)}
 				</li>
 			</ul>
 		</nav>
