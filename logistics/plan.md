@@ -10,3 +10,8 @@
 - user login/authentication
 - store each user's widgets
 
+
+
+# Widget ideas
+hydration tracker
+pomodoro timer

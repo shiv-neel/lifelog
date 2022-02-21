@@ -14,12 +14,16 @@
     "@emotion/styled": "^11.6.0",
     "@fontsource/courier-prime": "^4.5.1",
     "@fontsource/manrope": "^4.5.4",
+    "dotenv": "^16.0.0",
+    "firebase": "^9.6.7",
     "framer-motion": "^6.2.6",
+    "fs": "^0.0.1-security",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-anime": "^4.1.1",
     "react-animejs-wrapper": "^1.0.35",
     "react-dom": "17.0.2",
+    "react-firebase-hooks": "^5.0.2",
     "react-icons": "^4.3.1"
   },
   "devDependencies": {

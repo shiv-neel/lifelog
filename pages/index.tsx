@@ -7,7 +7,7 @@ import HydrationWidget from './widgets/Hydration/HydrationWidget'
 const Home: NextPage = () => {
 	return (
 		<div>
-			<h1 className='text-3xl font-bold'>Notion Widgets</h1>
+			<h1 className='text-3xl font-bold'>Notion++</h1>
 		</div>
 	)
 }
