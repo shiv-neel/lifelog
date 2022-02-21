@@ -74,12 +74,12 @@ const Bar: React.FC<BarProps> = ({ cups }) => {
 				<path
 					d='M3 277H112V286C112 290.418 108.418 294 104 294H11C6.58172 294 3 290.418 3 286V277Z'
 					fill='#B4B4B4'
-					fill-opacity='0.59'
+					fillOpacity='0.59'
 				/>
 				<path
 					d='M3 54C3 49.5817 6.58172 46 11 46H104C108.418 46 112 49.5817 112 54V63H3V54Z'
 					fill='#B4B4B4'
-					fill-opacity='0.59'
+					fillOpacity='0.59'
 				/>
 			</svg>
 
