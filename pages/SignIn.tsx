@@ -15,6 +15,7 @@ import { useAuth } from '../utils/AuthContext'
 import { IoLogoGoogle } from 'react-icons/io'
 import { FaFacebookSquare } from 'react-icons/fa'
 import { BsGithub } from 'react-icons/bs'
+import Link from 'next/link'
 
 const SignIn = () => {
 	const [email, setEmail] = useState<string>('')
@@ -65,7 +66,7 @@ const SignIn = () => {
 					Sign In
 				</Button>
 				<p>
-					Don&apos;t have an account? <a href='/SignUp'>Sign Up</a>
+					Don&apos;t have an account? <Link href='/SignUp'>Sign Up</Link>
 				</p>
 			</FormControl>
 			{error}

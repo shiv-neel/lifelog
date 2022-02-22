@@ -10,7 +10,7 @@ const Navbar = () => {
 		<nav className='w-full'>
 			<ul className='flex justify-end items-center gap-10 py-12 mr-12'>
 				<li className='mr-auto ml-12'>
-					<Link href='/'>
+					<Link href='/' passHref>
 						<div className='flex items-center'>
 							<SiNotion className='text-6xl' />
 							otion++
