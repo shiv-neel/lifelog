@@ -1,13 +1,11 @@
 import { Button, Divider, Heading } from '@chakra-ui/react'
 import React from 'react'
 import { BsGithub } from 'react-icons/bs'
-import { FaTwitter } from 'react-icons/fa'
 import { IoLogoGoogle } from 'react-icons/io'
 import { useAuth } from '../utils/AuthContext'
 
 const Connections = () => {
 	const googleSignIn = useAuth().googleSignIn
-	const twitterSignIn = useAuth().twitterSignIn
 	const githubSignIn = useAuth().githubSignIn
 
 	return (
@@ -28,18 +26,6 @@ const Connections = () => {
 					colorScheme={'red'}
 				>
 					<IoLogoGoogle className='text-3xl text-white' />
-				</Button>
-				<Button
-					onClick={twitterSignIn}
-					className='hover:scale-105 duration-100'
-					style={{
-						width: 60,
-						height: 60,
-						borderRadius: '50%',
-					}}
-					colorScheme={'blue'}
-				>
-					<FaTwitter className='text-3xl' />
 				</Button>
 				<Button
 					onClick={githubSignIn}

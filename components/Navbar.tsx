@@ -17,8 +17,9 @@ const Navbar = () => {
 			<ul className='flex justify-end items-center gap-10 py-12 mr-12'>
 				<li className='mr-auto ml-12 cursor-pointer select-none'>
 					<Link href='/' passHref>
-						<div className='flex items-center'>
+						<div className='flex items-center gap-1'>
 							<SiNotion className='text-6xl' />
+							<BsPlusSquare className='text-4xl' />
 							<BsPlusSquare className='text-4xl' />
 						</div>
 					</Link>
@@ -36,7 +37,7 @@ const Navbar = () => {
 					{user ? (
 						<Link href='/account' passHref>
 							<div>
-								<FaRegUserCircle className='text-4xl' />
+								<FaRegUserCircle className='text-4xl cursor-pointer hover:scale-105 duration-100' />
 							</div>
 						</Link>
 					) : (

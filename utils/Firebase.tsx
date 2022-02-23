@@ -12,20 +12,14 @@ import { getAuth, User, UserCredential } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 export interface AuthType {
-	currentUser: User | null
-	emailSignUp: (
-		email: string,
-		password: string
-	) => Promise<UserCredential | null>
+	currentUser: UserType | null
+	emailSignUp: (email: string, password: string) => Promise<UserType | null>
 
-	emailSignIn: (
-		email: string,
-		password: string
-	) => Promise<UserCredential | void>
+	emailSignIn: (email: string, password: string) => Promise<UserType | null>
 
-	googleSignIn: () => Promise<UserCredential | void>
-	githubSignIn: () => Promise<UserCredential | void>
-	twitterSignIn: () => Promise<UserCredential | void>
+	googleSignIn: () => Promise<void | UserType | null>
+	githubSignIn: () => Promise<void | UserType | null>
+	linkAccounts: () => Promise<void>
 	logout: () => Promise<void>
 }
 
@@ -33,7 +27,6 @@ export interface UserType {
 	uid: string
 	displayName: string
 	email: string
-	photoURL: string
 	providerData: string[]
 }
 
