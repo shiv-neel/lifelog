@@ -17,11 +17,15 @@ export interface AuthType {
 		email: string,
 		password: string
 	) => Promise<UserCredential | null>
+
 	emailSignIn: (
 		email: string,
 		password: string
-	) => Promise<UserCredential | null | void>
-	googleSignIn: () => Promise<UserCredential | null | void>
+	) => Promise<UserCredential | void>
+
+	googleSignIn: () => Promise<UserCredential | void>
+	githubSignIn: () => Promise<UserCredential | void>
+
 	logout: () => Promise<void>
 }
 

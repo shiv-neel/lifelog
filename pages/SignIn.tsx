@@ -16,6 +16,7 @@ import { IoLogoGoogle } from 'react-icons/io'
 import { FaFacebookSquare } from 'react-icons/fa'
 import { BsGithub } from 'react-icons/bs'
 import Link from 'next/link'
+import Connections from '../components/Connections'
 
 const SignIn = () => {
 	const [email, setEmail] = useState<string>('')
@@ -35,10 +36,10 @@ const SignIn = () => {
 	}
 	return (
 		<Box w={'lg'} className='flex flex-col justify-center mx-auto border-1 p-5'>
-			<Heading as='h1' size='xl' className='flex justify-center'>
+			<Heading as='h1' size='xl' className='flex justify-center mb-10'>
 				Sign In
 			</Heading>
-			<FormControl className='mt-5 space-y-2'>
+			<FormControl className='mt-5'>
 				<FormLabel htmlFor='email'>Email</FormLabel>
 				<Input
 					id='email'
@@ -46,7 +47,9 @@ const SignIn = () => {
 					placeholder='johndoe@email.com'
 					onChange={(e) => setEmail(e.target.value)}
 				/>
-				<FormLabel htmlFor='password'>Password</FormLabel>
+				<FormLabel htmlFor='password' className='mt-5'>
+					Password
+				</FormLabel>
 				<InputGroup size='md'>
 					<Input
 						pr='4.5rem'
@@ -57,59 +60,30 @@ const SignIn = () => {
 					/>
 
 					<InputRightElement width='4.5rem'>
-						<Button h='1.75rem' size='sm' onClick={handleClick}>
+						<Button
+							h='1.75rem'
+							size='sm'
+							onClick={handleClick}
+							colorScheme='blue'
+						>
 							{show ? 'Hide' : 'Show'}
 						</Button>
 					</InputRightElement>
 				</InputGroup>
-				<Button type='submit' onClick={submitHandler}>
+				<Button type='submit' onClick={submitHandler} className='my-5'>
 					Sign In
 				</Button>
 				<p>
-					Don&apos;t have an account? <Link href='/SignUp'>Sign Up</Link>
+					Don&apos;t have an account?{' '}
+					<Link href='/SignUp'>
+						<span className='text-blue-500 underline cursor-pointer'>
+							Sign Up
+						</span>
+					</Link>
 				</p>
 			</FormControl>
-			{error}
-			<Divider className='py-5' />
-			<Heading as='h2' size='md' className='flex justify-center'>
-				Or connect with
-			</Heading>
-			<div className='flex justify-center gap-10 py-6'>
-				<Button
-					onClick={googleSignIn}
-					className='hover:scale-105 duration-100'
-					style={{
-						width: 60,
-						height: 60,
-						borderRadius: '50%',
-					}}
-					colorScheme={'red'}
-				>
-					<IoLogoGoogle className='text-3xl text-white' />
-				</Button>
-				<Button
-					className='hover:scale-105 duration-100'
-					style={{
-						width: 60,
-						height: 60,
-						borderRadius: '50%',
-					}}
-					colorScheme={'blue'}
-				>
-					<FaFacebookSquare className='text-3xl' />
-				</Button>
-				<Button
-					className='hover:scale-105 duration-100'
-					style={{
-						width: 60,
-						height: 60,
-						borderRadius: '50%',
-						background: 'black',
-					}}
-				>
-					<BsGithub className='text-3xl text-white' />
-				</Button>
-			</div>
+			{<p className='text-red-600'>{error.slice(25)}</p>}
+			<Connections />
 		</Box>
 	)
 }

@@ -10,11 +10,13 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
+import Connections from '../components/Connections'
 import { useAuth } from '../utils/AuthContext'
 
 const SignUp = () => {
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
+	const [error, setError] = useState<string>('')
 	const [confirmPassword, setConfirmPassword] = useState<string>('')
 	const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true)
 
@@ -27,12 +29,14 @@ const SignUp = () => {
 		e.preventDefault()
 		if (password !== confirmPassword) setPasswordsMatch(false)
 		else {
+			setPasswordsMatch(true)
 			console.log(email, password)
 			try {
 				signup(email, password)
 					.then((res) => console.log(res?.user))
-					.catch((err) => console.log(err))
-			} catch (error) {
+					.catch((error) => setError(error.toString()))
+			} catch (error: any) {
+				setError(error.toString())
 				console.log(error)
 			}
 		}
@@ -40,8 +44,10 @@ const SignUp = () => {
 
 	return (
 		<Box w={'lg'} className='flex flex-col justify-center mx-auto border-1 p-5'>
-			<Heading as='h1'>Sign Up</Heading>
-			<FormControl className='mt-5 space-y-2'>
+			<Heading as='h1' className='flex justify-center mb-10'>
+				Sign Up
+			</Heading>
+			<FormControl className='mt-5'>
 				<FormLabel htmlFor='email'>Email</FormLabel>
 				<Input
 					id='email'
@@ -49,7 +55,9 @@ const SignUp = () => {
 					placeholder='johndoe@email.com'
 					onChange={(e) => setEmail(e.target.value)}
 				/>
-				<FormLabel htmlFor='password'>Password</FormLabel>
+				<FormLabel htmlFor='password' className='mt-5'>
+					Password
+				</FormLabel>
 				<InputGroup size='md'>
 					<Input
 						pr='4.5rem'
@@ -60,27 +68,46 @@ const SignUp = () => {
 					/>
 
 					<InputRightElement width='4.5rem'>
-						<Button h='1.75rem' size='sm' onClick={handleClick}>
+						<Button
+							h='1.75rem'
+							size='sm'
+							onClick={handleClick}
+							colorScheme='blue'
+						>
 							{show ? 'Hide' : 'Show'}
 						</Button>
 					</InputRightElement>
 				</InputGroup>
-				<FormLabel htmlFor='confirm-password'>Confirm Pasword</FormLabel>
+				<FormLabel htmlFor='confirm-password' className='mt-5'>
+					Confirm Pasword
+				</FormLabel>
 				<Input
 					pr='4.5rem'
 					type={show ? 'text' : 'password'}
 					placeholder='Confirm password'
 					id='confirm-password'
 					onChange={(e) => setConfirmPassword(e.target.value)}
-				/>
-				<Button type='submit' onClick={submitHandler}>
+				/>{' '}
+				{passwordsMatch ? (
+					<></>
+				) : (
+					<p className='text-red-500 mt-2 font-semibold'>
+						Passwords do not match.{' '}
+					</p>
+				)}
+				<Button type='submit' onClick={submitHandler} className='my-5'>
 					Sign Up
 				</Button>
 				<p>
-					Already have an account? <Link href='/SignIn'>Sign In</Link>
+					Already have an account?{' '}
+					<Link href='/SignIn'>
+						<span className='text-blue-500 underline cursor-pointer'>
+							Sign In
+						</span>
+					</Link>
 				</p>
-				{passwordsMatch ? <></> : <p>Passwords do not match. </p>}
 			</FormControl>
+			<Connections />
 		</Box>
 	)
 }

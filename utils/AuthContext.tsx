@@ -1,5 +1,6 @@
 import {
 	createUserWithEmailAndPassword,
+	GithubAuthProvider,
 	GoogleAuthProvider,
 	signInWithEmailAndPassword,
 	signInWithPopup,
@@ -9,7 +10,7 @@ import {
 } from 'firebase/auth'
 import Router from 'next/router'
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { auth, AuthType, UserType } from './Firebase'
+import { auth, AuthType } from './Firebase'
 
 const AuthContext = createContext<AuthType>({} as AuthType)
 
@@ -24,7 +25,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 		return createUserWithEmailAndPassword(auth, email, password).then(
 			(result) => {
 				setCurrentUser(result.user)
-				Router.push('/Dashboard')
+				Router.push('/dashboard')
 				return result
 			}
 		)
@@ -33,7 +34,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 	const emailSignIn = (email: string, password: string) => {
 		return signInWithEmailAndPassword(auth, email, password).then((result) => {
 			setCurrentUser(result.user)
-			Router.push('/Dashboard')
+			Router.push('/dashboard')
 			return result
 		})
 	}
@@ -43,24 +44,45 @@ export const AuthProvider: React.FC = ({ children }) => {
 		return await signInWithPopup(auth, googleProvider)
 			.then((result) => {
 				setCurrentUser(result.user)
-				Router.push('/Dashboard')
+				Router.push('/dashboard')
 				return result
 			})
 			.catch(() => alert('Error: Could not authenticate google account.'))
 	}
 
+	const githubProvider = new GithubAuthProvider()
+	const githubSignIn = async () => {
+		return await signInWithPopup(auth, githubProvider)
+			.then((result) => {
+				console.log(result)
+				setCurrentUser(result.user)
+				Router.push('/dashboard')
+				return result
+			})
+			.catch(() => alert('Error: Could not authenticate github account.'))
+	}
+
 	const logout = async () => {
 		return await signOut(auth).then(() => {
 			console.log('Sign out successful.')
+			Router.push('/')
 		})
 	}
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			setCurrentUser(user)
+			console.log(user)
 		})
 		return unsubscribe
 	}, [])
-	const value = { currentUser, emailSignUp, emailSignIn, googleSignIn, logout }
+	const value = {
+		currentUser,
+		emailSignUp,
+		emailSignIn,
+		googleSignIn,
+		githubSignIn,
+		logout,
+	}
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
