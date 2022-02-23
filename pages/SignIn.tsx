@@ -75,7 +75,7 @@ const SignIn = () => {
 				</Button>
 				<p>
 					Don&apos;t have an account?{' '}
-					<Link href='/SignUp'>
+					<Link href='/SignUp' passHref>
 						<span className='text-blue-500 underline cursor-pointer'>
 							Sign Up
 						</span>

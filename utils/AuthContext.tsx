@@ -5,6 +5,7 @@ import {
 	signInWithEmailAndPassword,
 	signInWithPopup,
 	signOut,
+	TwitterAuthProvider,
 	User,
 	UserCredential,
 } from 'firebase/auth'
@@ -34,7 +35,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 	const emailSignIn = (email: string, password: string) => {
 		return signInWithEmailAndPassword(auth, email, password).then((result) => {
 			setCurrentUser(result.user)
-			Router.push('/dashboard')
+			Router.push('/Dashboard')
 			return result
 		})
 	}
@@ -44,7 +45,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 		return await signInWithPopup(auth, googleProvider)
 			.then((result) => {
 				setCurrentUser(result.user)
-				Router.push('/dashboard')
+				Router.push('/Dashboard')
 				return result
 			})
 			.catch(() => alert('Error: Could not authenticate google account.'))
@@ -56,10 +57,21 @@ export const AuthProvider: React.FC = ({ children }) => {
 			.then((result) => {
 				console.log(result)
 				setCurrentUser(result.user)
-				Router.push('/dashboard')
+				Router.push('/Dashboard')
 				return result
 			})
 			.catch(() => alert('Error: Could not authenticate github account.'))
+	}
+
+	const twitterProvider = new TwitterAuthProvider()
+	const twitterSignIn = async () => {
+		return await signInWithPopup(auth, twitterProvider)
+			.then((result) => {
+				console.log(result)
+				setCurrentUser(result.user)
+				return result
+			})
+			.catch(() => alert('Error: Could not authenticate twitter account.'))
 	}
 
 	const logout = async () => {
@@ -82,6 +94,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 		emailSignIn,
 		googleSignIn,
 		githubSignIn,
+		twitterSignIn,
 		logout,
 	}
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -34,7 +34,7 @@ const Navbar = () => {
 				</li>
 				<li>
 					{user ? (
-						<Link href='/account'>
+						<Link href='/account' passHref>
 							<div>
 								<FaRegUserCircle className='text-4xl' />
 							</div>

@@ -25,7 +25,7 @@ export interface AuthType {
 
 	googleSignIn: () => Promise<UserCredential | void>
 	githubSignIn: () => Promise<UserCredential | void>
-
+	twitterSignIn: () => Promise<UserCredential | void>
 	logout: () => Promise<void>
 }
 

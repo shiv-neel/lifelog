@@ -100,7 +100,7 @@ const SignUp = () => {
 				</Button>
 				<p>
 					Already have an account?{' '}
-					<Link href='/SignIn'>
+					<Link href='/SignIn' passHref>
 						<span className='text-blue-500 underline cursor-pointer'>
 							Sign In
 						</span>
