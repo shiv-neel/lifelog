@@ -52,9 +52,9 @@ const Account = () => {
 			</Heading>
 			<Divider className='mb-10' />
 			<ul className='flex flex-col justify-center mx-auto gap-y-4 w-80'>
-				<li className='mb-5'>
+				<p className='mb-5 mx-auto'>
 					Good {timeOfDay}, {user?.displayName}.
-				</li>
+				</p>
 
 				<Button
 					onClick={googleHandler}

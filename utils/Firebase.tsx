@@ -13,12 +13,8 @@ import { getFirestore } from 'firebase/firestore'
 
 export interface AuthType {
 	currentUser: UserType | null
-	emailSignUp: (email: string, password: string) => Promise<UserType | null>
-
-	emailSignIn: (email: string, password: string) => Promise<UserType | null>
-
-	googleSignIn: () => Promise<void | UserType | null>
-	githubSignIn: () => Promise<void | UserType | null>
+	googleSignIn: () => Promise<void | UserType | null | boolean>
+	githubSignIn: () => Promise<void | UserType | null | boolean>
 	linkWithGoogle: () => Promise<void>
 	linkWithGithub: () => Promise<void>
 	unlinkFromGoogle: () => Promise<void>

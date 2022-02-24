@@ -45,26 +45,13 @@ export const AuthProvider: React.FC = ({ children }) => {
 		}
 	}
 
-	const emailSignUp = (email: string, password: string) => {
-		return createUserWithEmailAndPassword(auth, email, password).then(
-			(result) => {
-				return createUserType(result.user)
-			}
-		)
-	}
-
-	const emailSignIn = (email: string, password: string) => {
-		return signInWithEmailAndPassword(auth, email, password).then((result) => {
-			return createUserType(result.user)
-		})
-	}
-
 	const googleProvider = new GoogleAuthProvider()
 	const googleSignIn = async () => {
 		return await signInWithPopup(auth, googleProvider)
 			.then((result) => {
 				return createUserType(result.user)
 			})
+			.then(() => Router.push('../dashboard'))
 			.catch((err) => console.log(err))
 	}
 
@@ -88,6 +75,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 			.then((result) => {
 				return createUserType(result.user)
 			})
+			.then(() => Router.push('../dashboard'))
 			.catch((error) => {
 				console.log(error)
 				console.log(`an account already exists with your email.`)
@@ -124,8 +112,6 @@ export const AuthProvider: React.FC = ({ children }) => {
 	}, [])
 	const value = {
 		currentUser,
-		emailSignUp,
-		emailSignIn,
 		googleSignIn,
 		githubSignIn,
 		linkWithGoogle,
