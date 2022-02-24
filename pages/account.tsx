@@ -25,7 +25,7 @@ const Account = () => {
 		if (hour < 12) setTimeOfDay('Morning')
 		else if (hour >= 12 && hour < 17) setTimeOfDay('Afternoon')
 		else setTimeOfDay('Evening')
-	}, [])
+	})
 
 	const googleHandler = () => {
 		if (isLinkedWithGoogle) {

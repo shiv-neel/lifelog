@@ -2,7 +2,6 @@ import { Box, Button, Divider, Heading } from '@chakra-ui/react'
 import { useAuth } from '../utils/AuthContext'
 import { FcGoogle } from 'react-icons/fc'
 import { BsGithub } from 'react-icons/bs'
-import { NextResponse } from 'next/server'
 
 const SignIn = () => {
 	const googleSignIn = useAuth().googleSignIn
