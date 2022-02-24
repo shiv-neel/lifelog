@@ -36,7 +36,6 @@ export const AuthProvider: React.FC = ({ children }) => {
 				providerData: user.providerData!.map((u) => u.providerId),
 			}
 			setCurrentUser(userObject)
-			Router.push('/dashboard')
 			console.log(userObject)
 			return userObject
 		} else {
