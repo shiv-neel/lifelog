@@ -6,6 +6,7 @@ import { BsGithub } from 'react-icons/bs'
 const SignIn = () => {
 	const googleSignIn = useAuth().googleSignIn
 	const githubSignIn = useAuth().githubSignIn
+	const emailExists = useAuth().emailExists
 	console.log(useAuth().currentUser)
 	return (
 		<Box w={'lg'} className='flex flex-col justify-center mx-auto border-1 p-5'>
@@ -32,6 +33,23 @@ const SignIn = () => {
 					<BsGithub className='text-2xl' />{' '}
 					<p className='text-xl font-normal'>Sign in with Github</p>
 				</Button>
+				<p className='font-semibold my-5 leading-relaxed text-center'>
+					{emailExists ? (
+						<>
+							<p className='text-red-500 text-lg'>
+								You already have a Google account with this email registered
+								with us.
+							</p>
+							<br></br>
+							<p className='font-thin italic text-gray-500'>
+								Please log in to your Google account, and then connect your
+								Github account.
+							</p>
+						</>
+					) : (
+						''
+					)}
+				</p>
 			</div>
 		</Box>
 	)

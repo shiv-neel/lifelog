@@ -20,6 +20,9 @@ export interface AuthType {
 	unlinkFromGoogle: () => Promise<void>
 	unlinkFromGithub: () => Promise<void>
 	logout: () => Promise<void>
+	emailExists: boolean
+	googleUnlinkDisabled: boolean
+	githubUnlinkDisabled: boolean
 }
 
 export interface UserType {

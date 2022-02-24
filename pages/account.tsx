@@ -44,6 +44,18 @@ const Account = () => {
 		}
 		toggleLinkedWithGithub((p) => !p)
 	}
+	const [googleUnlinkDisabled, setGoogleUnlinkDisabled] =
+		useState<boolean>(false)
+	const [githubUnlinkDisabled, setGithubUnlinkDisabled] =
+		useState<boolean>(false)
+	useEffect(() => {
+		if (user?.providerData.length === 1 && user.providerData[0] === 'github') {
+			setGithubUnlinkDisabled(true)
+		}
+		if (user?.providerData.length === 1 && user.providerData[0] === 'google') {
+			setGoogleUnlinkDisabled(true)
+		}
+	}, [])
 
 	return (
 		<Box w='xl' className='flex flex-col justify-center mx-auto border-1 p-5'>
@@ -59,6 +71,7 @@ const Account = () => {
 				<Button
 					onClick={googleHandler}
 					className='gap-2 p-6 text-xl w-56 shadow-md items-center'
+					disabled={useAuth().googleUnlinkDisabled}
 				>
 					<FcGoogle className='text-2xl' />{' '}
 					<p className='font-normal text-xl'>
@@ -66,6 +79,7 @@ const Account = () => {
 					</p>
 				</Button>
 				<Button
+					disabled={useAuth().githubUnlinkDisabled}
 					onClick={githubHandler}
 					colorScheme={'whatsapp'}
 					className='gap-2 p-6 text-xl w-56 shadow-md items-center'

@@ -24,6 +24,11 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<UserType | null>(null)
+	const [emailExists, setEmailExists] = useState<boolean>(false)
+	const [googleUnlinkDisabled, setGoogleUnlinkDisabled] =
+		useState<boolean>(false)
+	const [githubUnlinkDisabled, setGithubUnlinkDisabled] =
+		useState<boolean>(false)
 
 	// converts User into custom UserType
 	const createUserType = (user: User | null) => {
@@ -41,6 +46,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 		} else {
 			setCurrentUser(null)
 			console.log('could not create user')
+			Router.push('/')
 			return null
 		}
 	}
@@ -78,7 +84,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 			.then(() => Router.push('../Dashboard'))
 			.catch((error) => {
 				console.log(error)
-				console.log(`an account already exists with your email.`)
+				setEmailExists(true)
 				console.log(currentUser)
 			})
 	}
@@ -110,6 +116,21 @@ export const AuthProvider: React.FC = ({ children }) => {
 		})
 		return unsubscribe
 	}, [])
+
+	useEffect(() => {
+		if (
+			currentUser?.providerData.length === 1 &&
+			currentUser.providerData[0] === 'github'
+		) {
+			setGithubUnlinkDisabled(true)
+		}
+		if (
+			currentUser?.providerData.length === 1 &&
+			currentUser.providerData[0] === 'google'
+		) {
+			setGoogleUnlinkDisabled(true)
+		}
+	}, [])
 	const value = {
 		currentUser,
 		googleSignIn,
@@ -119,6 +140,9 @@ export const AuthProvider: React.FC = ({ children }) => {
 		unlinkFromGoogle,
 		unlinkFromGithub,
 		logout,
+		emailExists,
+		googleUnlinkDisabled,
+		githubUnlinkDisabled,
 	}
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
