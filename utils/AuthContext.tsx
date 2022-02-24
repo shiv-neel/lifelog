@@ -51,7 +51,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 			.then((result) => {
 				return createUserType(result.user)
 			})
-			.then(() => Router.push('../dashboard'))
+			.then(() => Router.push('../Dashboard'))
 			.catch((err) => console.log(err))
 	}
 
@@ -75,7 +75,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 			.then((result) => {
 				return createUserType(result.user)
 			})
-			.then(() => Router.push('../dashboard'))
+			.then(() => Router.push('../Dashboard'))
 			.catch((error) => {
 				console.log(error)
 				console.log(`an account already exists with your email.`)
