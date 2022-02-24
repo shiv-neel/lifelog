@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Heading } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsGithub } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
 import { useAuth } from '../utils/AuthContext'
@@ -18,6 +18,14 @@ const Account = () => {
 	const [isLinkedWithGithub, toggleLinkedWithGithub] = useState<boolean>(
 		user?.providerData.find((p: string) => p === 'github.com') ? true : false
 	)
+
+	const [timeOfDay, setTimeOfDay] = useState('')
+	const hour = new Date().getHours()
+	useEffect(() => {
+		if (hour < 12) setTimeOfDay('Morning')
+		else if (hour >= 12 && hour < 17) setTimeOfDay('Afternoon')
+		else setTimeOfDay('Evening')
+	}, [hour])
 
 	const googleHandler = () => {
 		if (isLinkedWithGoogle) {
@@ -45,7 +53,7 @@ const Account = () => {
 			<Divider className='mb-10' />
 			<ul className='flex flex-col justify-center mx-auto gap-y-4 w-80'>
 				<li className='mb-5'>
-					Good 'insert time of day', {user?.displayName}.
+					Good {timeOfDay}, {user?.displayName}.
 				</li>
 
 				<Button

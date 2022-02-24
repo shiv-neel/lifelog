@@ -41,7 +41,7 @@ const Navbar = () => {
 							</div>
 						</Link>
 					) : (
-						<Link href='/SignIn'>
+						<Link href='/SignIn' passHref>
 							<Button
 								className='cursor-pointer shadow-lg'
 								style={{ backgroundColor: 'white', border: '2px solid black' }}
