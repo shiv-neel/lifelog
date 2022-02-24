@@ -8,6 +8,7 @@ import {
 	signInWithPopup,
 	signOut,
 	TwitterAuthProvider,
+	unlink,
 	User,
 	UserCredential,
 } from 'firebase/auth'
@@ -31,13 +32,16 @@ export const AuthProvider: React.FC = ({ children }) => {
 				uid: user.uid,
 				displayName: user.displayName!,
 				email: user.email!,
+				photoUrl: user.photoURL!,
 				providerData: user.providerData!.map((u) => u.providerId),
 			}
 			setCurrentUser(userObject)
 			Router.push('/dashboard')
+			console.log(userObject)
 			return userObject
 		} else {
 			setCurrentUser(null)
+			console.log('could not create user')
 			return null
 		}
 	}
@@ -65,21 +69,45 @@ export const AuthProvider: React.FC = ({ children }) => {
 			.catch((err) => console.log(err))
 	}
 
+	const linkWithGoogle = async () => {
+		return await linkWithPopup(auth.currentUser!, googleProvider)
+			.then((result) => {
+				createUserType(result.user)
+			})
+			.catch((err) => console.log(err))
+	}
+
+	const unlinkFromGoogle = async () => {
+		return await unlink(auth.currentUser!, 'google.com').then(() => {
+			console.log('unlinked account from google')
+		})
+	}
+
 	const githubProvider = new GithubAuthProvider()
 	const githubSignIn = async () => {
 		return await signInWithPopup(auth, githubProvider)
 			.then((result) => {
 				return createUserType(result.user)
 			})
-			.catch((err) => console.log(err))
+			.catch((error) => {
+				console.log(error)
+				console.log(`an account already exists with your email.`)
+				console.log(currentUser)
+			})
 	}
 
-	const linkAccounts = async () => {
+	const linkWithGithub = async () => {
 		return await linkWithPopup(auth.currentUser!, githubProvider)
 			.then((result) => {
 				createUserType(result.user)
 			})
 			.catch((err) => console.log(err))
+	}
+
+	const unlinkFromGithub = async () => {
+		return await unlink(auth.currentUser!, 'github.com').then(() => {
+			console.log('unlinked account from github')
+		})
 	}
 
 	const logout = async () => {
@@ -92,7 +120,6 @@ export const AuthProvider: React.FC = ({ children }) => {
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			createUserType(user)
-			console.log(user)
 		})
 		return unsubscribe
 	}, [])
@@ -102,7 +129,10 @@ export const AuthProvider: React.FC = ({ children }) => {
 		emailSignIn,
 		googleSignIn,
 		githubSignIn,
-		linkAccounts,
+		linkWithGoogle,
+		linkWithGithub,
+		unlinkFromGoogle,
+		unlinkFromGithub,
 		logout,
 	}
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

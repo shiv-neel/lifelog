@@ -42,7 +42,12 @@ const Navbar = () => {
 						</Link>
 					) : (
 						<Link href='/SignIn'>
-							<Button className='cursor-pointer'>Sign In</Button>
+							<Button
+								className='cursor-pointer shadow-lg'
+								style={{ backgroundColor: 'white', border: '2px solid black' }}
+							>
+								Sign In
+							</Button>
 						</Link>
 					)}
 				</li>

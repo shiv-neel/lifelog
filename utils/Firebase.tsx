@@ -19,7 +19,10 @@ export interface AuthType {
 
 	googleSignIn: () => Promise<void | UserType | null>
 	githubSignIn: () => Promise<void | UserType | null>
-	linkAccounts: () => Promise<void>
+	linkWithGoogle: () => Promise<void>
+	linkWithGithub: () => Promise<void>
+	unlinkFromGoogle: () => Promise<void>
+	unlinkFromGithub: () => Promise<void>
 	logout: () => Promise<void>
 }
 
@@ -27,6 +30,7 @@ export interface UserType {
 	uid: string
 	displayName: string
 	email: string
+	photoUrl: string
 	providerData: string[]
 }
 
