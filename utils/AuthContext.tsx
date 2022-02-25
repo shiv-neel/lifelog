@@ -26,9 +26,9 @@ export const AuthProvider: React.FC = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<UserType | null>(null)
 	const [emailExists, setEmailExists] = useState<boolean>(false)
 	const [googleUnlinkDisabled, setGoogleUnlinkDisabled] =
-		useState<boolean>(false)
+		useState<boolean>(currentUser?.providerData.length === 1 && currentUser?.providerData[0] === 'google.com')
 	const [githubUnlinkDisabled, setGithubUnlinkDisabled] =
-		useState<boolean>(false)
+		useState<boolean>(currentUser?.providerData.length === 1 && currentUser?.providerData[0] === 'github.com')
 
 	// converts User into custom UserType
 	const createUserType = (user: User | null) => {

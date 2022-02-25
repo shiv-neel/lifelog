@@ -87,7 +87,7 @@ const Bar: React.FC<BarProps> = ({ cups }) => {
 				<Anime
 					config={{
 						translateY: 50,
-						delay: anime.stagger(50),
+						delay: anime.stagger(10),
 						opacity: 0.8,
 					}}
 				>
