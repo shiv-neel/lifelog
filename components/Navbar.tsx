@@ -32,13 +32,20 @@ const Navbar = () => {
 					<Link href='/templates'>Templates</Link>
 				</li>
 				<li>
-					{user ? (  
+					{user ? (
 						<Link href='/account' passHref>
-							{user.photoUrl ? <Image style={{ borderRadius: '50%', width: '50px', height: '50px' }} src={useAuth().currentUser?.photoUrl
-							} className='shadow-lg cursor-pointer hover:scale-110 duration-100 active:scale-100'></Image> :
-							<div>
-								<FaRegUserCircle className='text-4xl cursor-pointer hover:scale-105 duration-100' />
-							</div>}
+							{user.photoUrl ? (
+								<Image
+									style={{ borderRadius: '50%', width: '50px', height: '50px' }}
+									src={user.photoUrl}
+									alt='pfp'
+									className='shadow-lg cursor-pointer hover:scale-110 duration-100 active:scale-100'
+								></Image>
+							) : (
+								<div>
+									<FaRegUserCircle className='text-4xl cursor-pointer hover:scale-105 duration-100' />
+								</div>
+							)}
 						</Link>
 					) : (
 						<Link href='/SignIn' passHref>
