@@ -12,11 +12,13 @@ import {
 	User,
 	UserCredential,
 } from 'firebase/auth'
+import { addDoc, collection } from 'firebase/firestore'
 import Router from 'next/router'
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { auth, AuthType, UserType } from './Firebase'
+import { auth, AuthType, db, UserType } from './Firebase'
+import { injectUser } from './Users'
 
-const AuthContext = createContext<AuthType>({} as AuthType)
+export const AuthContext = createContext<AuthType>({} as AuthType)
 
 export const useAuth = () => {
 	return useContext(AuthContext)
@@ -25,10 +27,14 @@ export const useAuth = () => {
 export const AuthProvider: React.FC = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<UserType | null>(null)
 	const [emailExists, setEmailExists] = useState<boolean>(false)
-	const [googleUnlinkDisabled, setGoogleUnlinkDisabled] =
-		useState<boolean>(currentUser?.providerData.length === 1 && currentUser?.providerData[0] === 'google.com')
-	const [githubUnlinkDisabled, setGithubUnlinkDisabled] =
-		useState<boolean>(currentUser?.providerData.length === 1 && currentUser?.providerData[0] === 'github.com')
+	const [googleUnlinkDisabled, setGoogleUnlinkDisabled] = useState<boolean>(
+		currentUser?.providerData.length === 1 &&
+			currentUser?.providerData[0] === 'google.com'
+	)
+	const [githubUnlinkDisabled, setGithubUnlinkDisabled] = useState<boolean>(
+		currentUser?.providerData.length === 1 &&
+			currentUser?.providerData[0] === 'github.com'
+	)
 
 	// converts User into custom UserType
 	const createUserType = (user: User | null) => {
@@ -39,9 +45,10 @@ export const AuthProvider: React.FC = ({ children }) => {
 				email: user.email!,
 				photoUrl: user.photoURL!,
 				providerData: user.providerData!.map((u) => u.providerId),
+				lastLogin: new Date(),
 			}
+			injectUser(userObject)
 			setCurrentUser(userObject)
-			console.log(userObject)
 			return userObject
 		} else {
 			setCurrentUser(null)
@@ -57,7 +64,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 			.then((result) => {
 				return createUserType(result.user)
 			})
-			.then(() => Router.push('../Dashboard'))
+			.then(() => Router.push('../dashboard'))
 			.catch((err) => console.log(err))
 	}
 

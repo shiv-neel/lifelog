@@ -7,9 +7,16 @@ import firebase, {
 
 import 'firebase/auth'
 
-import { getAuth, User, UserCredential } from 'firebase/auth'
+import { Auth, getAuth, User, UserCredential } from 'firebase/auth'
 
-import { getFirestore } from 'firebase/firestore'
+import {
+	collection,
+	doc,
+	Firestore,
+	getDocs,
+	getFirestore,
+	setDoc,
+} from 'firebase/firestore'
 
 export interface AuthType {
 	currentUser: UserType | null
@@ -31,6 +38,7 @@ export interface UserType {
 	email: string
 	photoUrl: string
 	providerData: string[]
+	lastLogin: Date | null
 }
 
 const firebaseConfig = {
@@ -38,9 +46,19 @@ const firebaseConfig = {
 	authDomain: 'notion-2d1b1.firebaseapp.com',
 	projectId: 'notion-2d1b1',
 }
+
 export const app: FirebaseApp = !getApps().length
 	? initializeApp(firebaseConfig)
 	: getApp() // if already initialized, use that one
 
-export const auth = getAuth(app)
-export const db = getFirestore(app)
+export const auth: Auth = getAuth(app)
+export const db: Firestore = getFirestore(app)
+
+export const getData = async () => {
+	// create document in our db under collection 'user' with name 'ye'
+	await setDoc(doc(db, 'user', 'd'), {
+		username: 'kanye',
+	})
+}
+
+export const updateData = async (data: UserType) => {}

@@ -15,21 +15,20 @@ const Navbar = () => {
 			<ul className='flex justify-end items-center gap-10 py-12 mr-12'>
 				<li className='mr-auto ml-12 cursor-pointer select-none'>
 					<Link href='/' passHref>
-						<div className='flex items-center gap-1'>
-							<SiNotion className='text-6xl' />
-							<BsPlusSquare className='text-4xl' />
-							<BsPlusSquare className='text-4xl' />
-						</div>
+						<div className='flex items-center gap-1'>LOGO</div>
 					</Link>
 				</li>
 				<li className='hover:scale-105 duration-100 hover:underline'>
-					<Link href='/Dashboard'>Dashboard</Link>
+					<Link href='/dashboard'>Dashboard</Link>
 				</li>
 				<li className='hover:scale-105 duration-100 hover:underline'>
-					<Link href='/widgets'>Widgets</Link>
+					<Link href='/timelog'>Time Log</Link>
 				</li>
 				<li className='hover:scale-105 duration-100 hover:underline'>
-					<Link href='/templates'>Templates</Link>
+					<Link href='/habits'>Habits</Link>
+				</li>
+				<li className='hover:scale-105 duration-100 hover:underline'>
+					<Link href='/goals'>Goals</Link>
 				</li>
 				<li>
 					{user ? (

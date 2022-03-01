@@ -7,7 +7,7 @@ const SignIn = () => {
 	const googleSignIn = useAuth().googleSignIn
 	const githubSignIn = useAuth().githubSignIn
 	const emailExists = useAuth().emailExists
-	console.log(useAuth().currentUser)
+
 	return (
 		<Box w={'lg'} className='flex flex-col justify-center mx-auto border-1 p-5'>
 			<Heading as='h1' size='xl' className='flex justify-center mb-10'>
