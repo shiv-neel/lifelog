@@ -1,6 +1,7 @@
-import { Box, Button, FormLabel, Input } from '@chakra-ui/react'
+import { Box, Button, FormLabel, Heading, Input } from '@chakra-ui/react'
 import { doc, setDoc } from 'firebase/firestore'
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import { BsFillPauseFill, BsFillPlayFill, BsStopFill } from 'react-icons/bs'
 import { AuthContext, useAuth } from '../../utils/AuthContext'
 import { db } from '../../utils/Firebase'
 import {
@@ -66,22 +67,50 @@ const CreateLog = () => {
 	}
 
 	return (
-		<Box>
-			<FormLabel htmlFor='input'></FormLabel>
+		<Box className='flex flex-col justify-center text-center'>
+			<FormLabel htmlFor='input'>Take control of your time!</FormLabel>
 			<Input
 				id='input'
 				placeholder='What are you working on?'
-				w={'md'}
-				className='p-5 flex my-5'
+				w={'lg'}
+				className='p-5 flex my-5 mx-auto justify-center'
 				value={input}
 				onChange={(e) => setInput(e.target.value)}
 				isDisabled={isDisabled}
 			/>
-			{time}
-			<Button onClick={isActive ? pauseHandler : startHandler}>
-				{!isActive ? 'start' : 'pause'}
-			</Button>
-			<Button onClick={resetHandler}>stop</Button>
+			<p className='text-3xl font-bold p-3'>{time}</p>
+			<Box className='flex justify-center space-x-5'>
+				<Button
+					onClick={isActive ? pauseHandler : startHandler}
+					variant='solid'
+					className='shadow-md text-center active:-rotate-180 duration-75'
+					colorScheme={isActive ? 'whiteAlpha' : 'linkedin'}
+					borderRadius={'100'}
+					w={50}
+					h={50}
+				>
+					<p className='font-light text-4xl'>
+						{!isActive ? (
+							<BsFillPlayFill className='pl-1' />
+						) : (
+							<BsFillPauseFill color='#0072b1' />
+						)}
+					</p>
+				</Button>
+				<Button
+					onClick={resetHandler}
+					variant='solid'
+					className='shadow-md text-center active:rotate-180 duration-200'
+					colorScheme={'whiteAlpha'}
+					borderRadius={'100'}
+					w={50}
+					h={50}
+				>
+					<p className='font-light text-4xl'>
+						<BsStopFill color='#d11f2c' />
+					</p>
+				</Button>
+			</Box>
 			{task}
 		</Box>
 	)
