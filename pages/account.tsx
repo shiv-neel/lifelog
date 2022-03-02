@@ -81,7 +81,7 @@ const Account = () => {
 					Good {timeOfDay}, {user?.displayName}.
 				</p>
 				<Box className='mb-5 mx-auto space-x-3'>
-					<span>Dark Mode</span>{' '}
+					<span>{colorMode} mode</span>{' '}
 					<Button onClick={toggleColorMode}>
 						{colorMode === 'dark' ? (
 							<MdDarkMode className='text-xl' />

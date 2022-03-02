@@ -24,11 +24,20 @@ const CreateLog = () => {
 		if (isActive) {
 			interval = setInterval(() => {
 				setTime((oldTime) => oldTime + 1)
-				updateTask(user, time, task)
 			}, 1000)
 		} else clearInterval(interval)
 		return () => clearInterval(interval) // clear interval if component unmounts
 	}, [isActive, isPaused, time])
+
+	useEffect(() => {
+		var interval: any
+		if (time) {
+			interval = setInterval(() => {
+				updateTask(user, time, task)
+			}, 60000)
+		} else clearInterval(interval)
+		return () => clearInterval(interval)
+	}, [time])
 
 	const startHandler = () => {
 		if (!input && !task) return
