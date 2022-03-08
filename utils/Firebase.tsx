@@ -42,23 +42,17 @@ export interface UserType {
 }
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyCBJV8o38ddncta2brGPhpluAuTRSQ_n0k',
-	authDomain: 'notion-2d1b1.firebaseapp.com',
-	projectId: 'notion-2d1b1',
+	apiKey: 'AIzaSyBlzcUlfDSOdeknooVhs9sAzYBLCtHzuzc',
+	authDomain: 'lifelog-app-189b8.firebaseapp.com',
+	projectId: 'lifelog-app-189b8',
+	storageBucket: 'lifelog-app-189b8.appspot.com',
+	messagingSenderId: '1005865703931',
+	appId: '1:1005865703931:web:75bd21aabbc3624b86535e',
+	measurementId: 'G-QTRX0QNMWL',
 }
-
 export const app: FirebaseApp = !getApps().length
 	? initializeApp(firebaseConfig)
 	: getApp() // if already initialized, use that one
 
 export const auth: Auth = getAuth(app)
 export const db: Firestore = getFirestore(app)
-
-export const getData = async () => {
-	// create document in our db under collection 'user' with name 'ye'
-	await setDoc(doc(db, 'user', 'd'), {
-		username: 'kanye',
-	})
-}
-
-export const updateData = async (data: UserType) => {}

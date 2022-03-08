@@ -4,11 +4,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { BsFillPauseFill, BsFillPlayFill, BsStopFill } from 'react-icons/bs'
 import { AuthContext, useAuth } from '../../utils/AuthContext'
 import { db } from '../../utils/Firebase'
-import {
-	clearCurrentTask,
-	injectTask,
-	updateTask,
-} from '../../utils/TimeLogUtils'
+import { createTask } from '../../utils/TimeLogUtils'
 
 const CreateLog = () => {
 	const [input, setInput] = useState<string>('')
@@ -28,16 +24,6 @@ const CreateLog = () => {
 		} else clearInterval(interval)
 		return () => clearInterval(interval) // clear interval if component unmounts
 	}, [isActive, isPaused, time])
-
-	useEffect(() => {
-		var interval: any
-		if (time) {
-			interval = setInterval(() => {
-				updateTask(user, time, task)
-			}, 60000)
-		} else clearInterval(interval)
-		return () => clearInterval(interval)
-	}, [time])
 
 	const startHandler = () => {
 		if (!input && !task) return
@@ -68,10 +54,9 @@ const CreateLog = () => {
 				taskname: task,
 				duration: time,
 				date: Number(new Date()),
-				user: user,
+				uid: user.uid,
 			}
-			await clearCurrentTask(user)
-			await injectTask(user, taskToInject)
+			await createTask(user, taskToInject)
 		}
 	}
 
@@ -92,7 +77,7 @@ const CreateLog = () => {
 				<Button
 					onClick={isActive ? pauseHandler : startHandler}
 					variant='solid'
-					className='shadow-md text-center active:-rotate-180 duration-75'
+					className='shadow-md text-center active:-rotate-180 duration-200'
 					colorScheme={isActive ? 'whiteAlpha' : 'linkedin'}
 					borderRadius={'100'}
 					w={50}

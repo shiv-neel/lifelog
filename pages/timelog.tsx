@@ -2,7 +2,6 @@ import { Box, Heading } from '@chakra-ui/react'
 import React from 'react'
 import CreateLog from '../components/TimeLogging/CreateLog'
 import LoggedTasks from '../components/TimeLogging/LoggedTasks'
-import { injectTask } from '../utils/TimeLogUtils'
 
 const TimeLog = () => {
 	return (
