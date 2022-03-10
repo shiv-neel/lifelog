@@ -1,19 +1,28 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core'
+import { Field, Int, ObjectType } from 'type-graphql'
 
+@ObjectType()
 @Entity()
 export class Task {
-    @PrimaryKey()
-    id!: number
+	// need to explicitly declare fields' types as () => Type
+	// to hide any properties from graphql schema, omit @Field() decorator
+	@Field(() => Int)
+	@PrimaryKey()
+	id!: number
 
-    @Property()
-    title!: string
+	@Field(() => String)
+	@Property()
+	title!: string
 
-    @Property({ type: 'date' })
-    createdAt? = new Date()
+	@Field(() => String)
+	@Property({ type: 'date' })
+	createdAt? = new Date()
 
-    @Property({ type: 'date', onUpdate: () => new Date() })
-    updatedAt? = new Date()
+	@Field(() => String)
+	@Property({ type: 'date', onUpdate: () => new Date() })
+	updatedAt? = new Date()
 
-    @Property()
-    duration?: number
+	@Field(() => Int)
+	@Property()
+	duration?: number
 }
