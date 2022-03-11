@@ -5,13 +5,16 @@ import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
 @Resolver() // resolver defines what to return to graphql for a query or mutation
 export class TaskResolver {
 	@Query(() => [Task]) // query should return type Task[] (graphql reads it as [Task])
-	tasks(@Ctx() { em }: MyContext): Promise<Task[]> {
+	getAllTasks(@Ctx() { em }: MyContext): Promise<Task[]> {
 		// destructuring the ctx obj
 		return em.find(Task, {})
 	}
 
 	@Query(() => Task, { nullable: true })
-	task(@Arg('id') id: number, @Ctx() { em }: MyContext): Promise<Task | null> {
+	getTaskById(
+		@Arg('id') id: number,
+		@Ctx() { em }: MyContext
+	): Promise<Task | null> {
 		return em.findOne(Task, { id })
 	}
 

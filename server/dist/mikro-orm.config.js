@@ -6,15 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("./constants");
 const Task_1 = require("./entities/Task");
 const path_1 = __importDefault(require("path"));
+const User_1 = require("./entities/User");
 exports.default = {
     migrations: {
         path: path_1.default.join(__dirname, './migrations'),
-        pattern: /^[\w-]+\d+\.[jt]s$/
+        pattern: /^[\w-]+\d+\.[jt]s$/,
     },
     dbName: 'lifelog',
     debug: !constants_1.__prod__,
     type: 'postgresql',
-    entities: [Task_1.Task],
-    allowGlobalContext: true
+    entities: [Task_1.Task, User_1.User],
+    allowGlobalContext: true,
 };
 //# sourceMappingURL=mikro-orm.config.js.map

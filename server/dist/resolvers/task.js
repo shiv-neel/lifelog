@@ -16,10 +16,10 @@ exports.TaskResolver = void 0;
 const Task_1 = require("../entities/Task");
 const type_graphql_1 = require("type-graphql");
 let TaskResolver = class TaskResolver {
-    tasks({ em }) {
+    getAllTasks({ em }) {
         return em.find(Task_1.Task, {});
     }
-    task(id, { em }) {
+    getTaskById(id, { em }) {
         return em.findOne(Task_1.Task, { id });
     }
     async createTask(title, duration, { em }) {
@@ -65,7 +65,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], TaskResolver.prototype, "tasks", null);
+], TaskResolver.prototype, "getAllTasks", null);
 __decorate([
     (0, type_graphql_1.Query)(() => Task_1.Task, { nullable: true }),
     __param(0, (0, type_graphql_1.Arg)('id')),
@@ -73,7 +73,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
-], TaskResolver.prototype, "task", null);
+], TaskResolver.prototype, "getTaskById", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Task_1.Task),
     __param(0, (0, type_graphql_1.Arg)('title')),

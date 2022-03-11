@@ -6,6 +6,7 @@ import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
 import { TaskResolver } from './resolvers/task'
+import { UserResolver } from './resolvers/user'
 
 const main = async () => {
 	const orm = await MikroORM.init(config)
@@ -14,11 +15,12 @@ const main = async () => {
 	const app = express()
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [TaskResolver],
+			resolvers: [TaskResolver, UserResolver],
 			validate: false,
 		}),
 		context: () => ({ em: orm.em }),
 	})
+
 	await apolloServer.start()
 	apolloServer.applyMiddleware({ app })
 	const PORT = process.env.PORT || 4000
