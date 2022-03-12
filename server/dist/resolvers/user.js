@@ -118,7 +118,7 @@ let UserResolver = class UserResolver {
         }
         return { user };
     }
-    async login(options, { em }) {
+    async login(options, { em, req }) {
         const user = await em.findOne(User_1.User, {
             username: options.username.toLowerCase(),
         });
@@ -133,7 +133,8 @@ let UserResolver = class UserResolver {
                 errors: [{ field: 'password', message: 'password is incorrect' }],
             };
         }
-        return { user: user };
+        req.session.id = user.id.toString();
+        return { user };
     }
 };
 __decorate([
