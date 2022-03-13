@@ -133,7 +133,6 @@ let UserResolver = class UserResolver {
                 errors: [{ field: 'password', message: 'password is incorrect' }],
             };
         }
-        req.session.id = user.id.toString();
         return { user };
     }
 };
