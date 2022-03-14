@@ -1,4 +1,4 @@
-import { MyContext } from '../types'
+import { CustomSessionData, MyContext } from '../types'
 import {
 	Arg,
 	Ctx,
@@ -131,7 +131,9 @@ export class UserResolver {
 				errors: [{ field: 'password', message: 'password is incorrect' }],
 			}
 		}
-		req.session.id = user.id.toString()
+
+		let sess = req.session as CustomSessionData
+		sess.userId = user.id
 
 		return { user }
 	}
