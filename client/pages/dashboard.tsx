@@ -10,7 +10,7 @@ const Dashboard = () => {
 		if (hour < 12) setTimeOfDay('Morning')
 		else if (hour >= 12 && hour < 17) setTimeOfDay('Afternoon')
 		else setTimeOfDay('Evening')
-	}, [])
+	}, [hour])
 
 	return (
 		<Box className='mx-20 mt-10'>

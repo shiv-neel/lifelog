@@ -28,6 +28,13 @@ const main = async () => {
 	})
 
 	app.use(
+		cors({
+			origin: 'http://localhost:3000',
+			credentials: true,
+		})
+	)
+
+	app.use(
 		session({
 			name: 'sid',
 			store: new RedisStore({

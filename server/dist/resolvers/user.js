@@ -65,39 +65,33 @@ let UserResolver = class UserResolver {
     getUserById(id, { em }) {
         return em.findOne(User_1.User, { id });
     }
-    async register(options, { em }) {
-        if (options.username.length <= 2) {
-            return {
-                errors: [
-                    {
-                        field: 'username',
-                        message: 'Username must be longer than 2 characters.',
-                    },
-                ],
-            };
-        }
-        if (options.password.length <= 6) {
-            return {
-                errors: [
-                    {
-                        field: 'password',
-                        message: 'Password must be longer than 6 characters.',
-                    },
-                ],
-            };
-        }
+    async me({ req, em }) {
+        const sess = req.session;
+        if (!sess.userId)
+            return null;
+        const user = await em.findOne(User_1.User, { id: sess.userId });
+        return user;
+    }
+    async register(options, { em, req }) {
+        const errors = [];
         const existingUser = await em.findOne(User_1.User, {
             username: options.username.toLowerCase(),
         });
         if (existingUser)
-            return {
-                errors: [
-                    {
-                        field: 'username',
-                        message: `User with username ${options.username} already exists.`,
-                    },
-                ],
-            };
+            errors.push({
+                field: 'username',
+                message: `User with username ${options.username} already exists.`,
+            });
+        if (options.username.length <= 2)
+            errors.push({
+                field: 'username',
+                message: 'Username must be longer than 2 characters.',
+            });
+        if (options.password.length <= 6)
+            errors.push({
+                field: 'password',
+                message: 'Password must be longer than 6 characters.',
+            });
         const hashedPassword = await argon2_1.default.hash(options.password);
         const user = em.create(User_1.User, {
             username: options.username,
@@ -107,15 +101,16 @@ let UserResolver = class UserResolver {
             await em.persistAndFlush(user);
         }
         catch (err) {
-            return {
-                errors: [
-                    {
-                        field: 'username',
-                        message: 'Could not register user. Please try again.',
-                    },
-                ],
-            };
+            if (!errors.length)
+                errors.push({
+                    field: 'username',
+                    message: 'Could not register user. Please try again.',
+                });
         }
+        if (errors)
+            return { errors };
+        const sess = req.session;
+        sess.userId = user.id;
         return { user };
     }
     async login(options, { em, req }) {
@@ -153,6 +148,13 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "getUserById", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => User_1.User, { nullable: true }),
+    __param(0, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "me", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)('options')),

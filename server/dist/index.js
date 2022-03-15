@@ -15,6 +15,7 @@ const user_1 = require("./resolvers/user");
 const ioredis_1 = __importDefault(require("ioredis"));
 const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
+const cors_1 = __importDefault(require("cors"));
 const apollo_server_core_1 = require("apollo-server-core");
 const main = async () => {
     const orm = await core_1.MikroORM.init(mikro_orm_config_1.default);
@@ -25,6 +26,10 @@ const main = async () => {
     app.get('/', (_, res) => {
         res.send('server is live!');
     });
+    app.use((0, cors_1.default)({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    }));
     app.use((0, express_session_1.default)({
         name: 'sid',
         store: new RedisStore({

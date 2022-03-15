@@ -5,7 +5,7 @@ const Home: NextPage = () => {
 	return (
 		<Box>
 			<Heading as='h1' className='text-3xl font-bold mx-20 mt-10'>
-				LifeLog
+				INCREMENT++
 			</Heading>
 		</Box>
 	)
