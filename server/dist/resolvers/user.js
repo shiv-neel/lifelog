@@ -28,6 +28,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
+], UsernamePasswordInput.prototype, "email", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
 ], UsernamePasswordInput.prototype, "password", void 0);
 UsernamePasswordInput = __decorate([
     (0, type_graphql_1.InputType)()
@@ -74,13 +78,21 @@ let UserResolver = class UserResolver {
     }
     async register(options, { em, req }) {
         const errors = [];
-        const existingUser = await em.findOne(User_1.User, {
+        const existingUsername = await em.findOne(User_1.User, {
             username: options.username.toLowerCase(),
         });
-        if (existingUser)
+        if (existingUsername)
             errors.push({
                 field: 'username',
                 message: `User with username ${options.username} already exists.`,
+            });
+        const existingEmail = await em.findOne(User_1.User, {
+            email: options.email.toLowerCase(),
+        });
+        if (existingEmail)
+            errors.push({
+                field: 'email',
+                message: `User with email ${options.email} already exists.`,
             });
         if (options.username.length <= 2)
             errors.push({
@@ -93,12 +105,22 @@ let UserResolver = class UserResolver {
                 message: 'Password must be longer than 6 characters.',
             });
         const hashedPassword = await argon2_1.default.hash(options.password);
-        const user = em.create(User_1.User, {
-            username: options.username,
-            password: hashedPassword,
-        });
         try {
-            await em.persistAndFlush(user);
+            const res = await em
+                .createQueryBuilder(User_1.User)
+                .getKnexQuery()
+                .insert({
+                username: options.username,
+                email: options.email,
+                password: hashedPassword,
+                created_at: new Date(),
+                updated_at: new Date(),
+            })
+                .returning('*');
+            const user = res[0];
+            const sess = req.session;
+            sess.userId = user.id;
+            return { user };
         }
         catch (err) {
             if (!errors.length)
@@ -106,12 +128,8 @@ let UserResolver = class UserResolver {
                     field: 'username',
                     message: 'Could not register user. Please try again.',
                 });
-        }
-        if (errors)
             return { errors };
-        const sess = req.session;
-        sess.userId = user.id;
-        return { user };
+        }
     }
     async login(options, { em, req }) {
         const user = await em.findOne(User_1.User, {

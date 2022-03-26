@@ -12,11 +12,14 @@ import {
 } from 'type-graphql'
 import { User } from '../entities/User'
 import argon from 'argon2'
+import { EntityManager } from '@mikro-orm/postgresql'
 
 @InputType()
 class UsernamePasswordInput {
 	@Field()
 	username: string
+	@Field()
+	email: string
 	@Field()
 	password: string
 }
@@ -68,13 +71,23 @@ export class UserResolver {
 		@Ctx() { em, req }: MyContext
 	): Promise<UserResponse> {
 		const errors: FieldError[] = []
-		const existingUser = await em.findOne(User, {
+		const existingUsername = await em.findOne(User, {
 			username: options.username.toLowerCase(),
 		})
-		if (existingUser)
+		if (existingUsername)
 			errors.push({
 				field: 'username',
 				message: `User with username ${options.username} already exists.`,
+			})
+
+		const existingEmail = await em.findOne(User, {
+			email: options.email.toLowerCase(),
+		})
+
+		if (existingEmail)
+			errors.push({
+				field: 'email',
+				message: `User with email ${options.email} already exists.`,
 			})
 
 		if (options.username.length <= 2)
@@ -90,26 +103,30 @@ export class UserResolver {
 			})
 
 		const hashedPassword = await argon.hash(options.password)
-		const user = em.create(User, {
-			username: options.username,
-			password: hashedPassword,
-		})
 		try {
-			await em.persistAndFlush(user)
-		} catch (err) {
-			if (!errors.length)
-			errors.push({
-				field: 'username',
-				message: 'Could not register user. Please try again.',
-			})
-		}
-			if (errors) return { errors }
+			const res = await (em as EntityManager)
+				.createQueryBuilder(User)
+				.getKnexQuery()
+				.insert({
+					username: options.username,
+					email: options.email,
+					password: hashedPassword,
+					created_at: new Date(),
+					updated_at: new Date(),
+				})
+				.returning('*')
+			const user = res[0]
 			const sess = req.session as CustomSessionData
 			sess.userId = user.id
-
-		
 			return { user }
-		
+		} catch (err) {
+			if (!errors.length)
+				errors.push({
+					field: 'username',
+					message: 'Could not register user. Please try again.',
+				})
+			return { errors }
+		}
 	}
 
 	@Mutation(() => UserResponse)
@@ -135,7 +152,6 @@ export class UserResolver {
 
 		let sess = req.session as CustomSessionData
 		sess.userId = user.id
-
 		return { user }
 	}
 }

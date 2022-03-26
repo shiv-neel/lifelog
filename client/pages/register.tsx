@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 
 export interface SubmitProps {
 	username: string
+	email: string
 	password: string
 	confirmPassword: string
 }
@@ -16,6 +17,7 @@ export interface SetErrors {
 	(
 		errors: FormikErrors<{
 			username: string
+			email: string
 			password: string
 			confirmPassword: string
 		}>
@@ -28,32 +30,39 @@ const SignUp = () => {
 
 	const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false)
 	const [isLoading, setLoading] = useState<boolean>(false)
+	const [success, setSuccess] = useState<boolean>(false)
 
 	const handleRegistration = async (
 		values: SubmitProps,
 		setErrors: SetErrors
 	) => {
 		setLoading(true)
-		const { username, password, confirmPassword } = values
+		const { username, email, password, confirmPassword } = values
 		if (password !== confirmPassword) {
 			setPasswordsMatch(false)
 			setErrors({ confirmPassword: 'Passwords do not match. ' })
 			return
 		} else setPasswordsMatch(true)
-		const submitResponse = await register({ username, password })
+		const submitResponse = await register({ username, email, password })
 		setLoading(false)
 		const errs = submitResponse.data?.register.errors
 		if (errs) {
+			setSuccess(false)
 			if (errs.filter((e) => e.field === 'username').length)
 				setErrors({
 					username: errs.filter((e) => e.field === 'username')[0].message,
+				})
+			if (errs.filter((e) => e.field === 'email').length)
+				setErrors({
+					email: errs.filter((e) => e.field === 'email')[0].message,
 				})
 			if (errs.filter((e) => e.field === 'password').length)
 				setErrors({
 					password: errs.filter((e) => e.field === 'password')[0].message,
 				})
-		} else if (submitResponse.data?.register.user) {
-			router.push('/dashboard')
+		} else {
+			setSuccess(true)
+			//router.push('/dashboard')
 		}
 	}
 
@@ -64,7 +73,12 @@ const SignUp = () => {
 			</Heading>
 			<Divider my={5} />
 			<Formik
-				initialValues={{ username: '', password: '', confirmPassword: '' }}
+				initialValues={{
+					username: '',
+					email: '',
+					password: '',
+					confirmPassword: '',
+				}}
 				onSubmit={async (values, { setErrors }) => {
 					await handleRegistration(values, setErrors)
 				}}
@@ -76,6 +90,13 @@ const SignUp = () => {
 							placeholder='Enter username'
 							label='Username'
 							type='text'
+						/>
+
+						<InputField
+							name='email'
+							placeholder='Enter e-mail address'
+							label='E-mail'
+							type='email'
 						/>
 
 						<InputField
@@ -107,6 +128,7 @@ const SignUp = () => {
 					<a className='underline'>Sign In</a>
 				</Link>
 			</p>
+			{success ? <p>Success!</p> : <></>}
 		</Box>
 	)
 }
