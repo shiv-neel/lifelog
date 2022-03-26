@@ -1,34 +1,52 @@
-import {
-	Box,
-	Button,
-	ButtonGroup,
-	Divider,
-	FormControl,
-	FormLabel,
-	Heading,
-	Input,
-	InputGroup,
-	InputRightElement,
-} from '@chakra-ui/react'
-import React, { useEffect, useRef, useState } from 'react'
-import { useAuth } from '../utils/AuthContext'
-import { IoLogoGoogle } from 'react-icons/io'
-import { FaFacebookSquare } from 'react-icons/fa'
-import { BsGithub } from 'react-icons/bs'
+import { Box, Button, Divider, Heading } from '@chakra-ui/react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikErrors } from 'formik'
 import { InputField } from '../src/components/InputField'
+import { useLoginMutation } from '../src/generated/graphql'
+import { useRouter } from 'next/router'
+
+export interface LoginProps {
+	username: string
+	password: string
+}
+
+export interface SetErrors {
+	(
+		errors: FormikErrors<{
+			username: string
+			password: string
+		}>
+	): void
+}
 
 const SignIn = () => {
-	const [username, setUsername] = useState<string>('')
-	const [password, setPassword] = useState<string>('')
+	const router = useRouter()
 	const [isLoading, setLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string>('')
-	const [show, setShow] = useState(false)
+	const [show, setShow] = useState<boolean>(false)
 	const handleClick = () => setShow(!show)
+	const [success, setSuccess] = useState<boolean>(false)
 
-	const handleLogin = (e: any) => {
-		e.preventDefault()
+	const [, login] = useLoginMutation()
+	const handleLogin = async (values: LoginProps, setErrors: SetErrors) => {
+		setLoading(true)
+		const { username, password } = values
+		const response = await login({ username, password })
+		const errs = response.data?.login.errors
+		if (errs) {
+			if (errs.filter((e) => e.field === 'username').length)
+				setErrors({
+					username: errs.filter((e) => e.field === 'username')[0].message,
+				})
+			if (errs.filter((e) => e.field === 'password').length)
+				setErrors({
+					password: errs.filter((e) => e.field === 'password')[0].message,
+				})
+		} else {
+			setSuccess(true)
+			router.push('/dashboard')
+		}
 	}
 
 	return (
@@ -38,8 +56,10 @@ const SignIn = () => {
 			</Heading>
 			<Divider my={5} />
 			<Formik
-				initialValues={{ username: '', password: '', confirmPassword: '' }}
-				onSubmit={(values) => handleLogin(values)}
+				initialValues={{ username: '', password: '' }}
+				onSubmit={async (values, { setErrors }) => {
+					return await handleLogin(values, setErrors)
+				}}
 			>
 				{({ isSubmitting }) => (
 					<Form>

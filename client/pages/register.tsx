@@ -5,11 +5,10 @@ import { Form, Formik, FormikErrors } from 'formik'
 import { InputField } from '../src/components/InputField'
 import { FieldError, useRegisterMutation } from '../src/generated/graphql'
 import { useRouter } from 'next/router'
+import { LoginProps } from './login'
 
-export interface SubmitProps {
-	username: string
+interface RegisterProps extends LoginProps {
 	email: string
-	password: string
 	confirmPassword: string
 }
 
@@ -33,7 +32,7 @@ const SignUp = () => {
 	const [success, setSuccess] = useState<boolean>(false)
 
 	const handleRegistration = async (
-		values: SubmitProps,
+		values: RegisterProps,
 		setErrors: SetErrors
 	) => {
 		setLoading(true)
@@ -43,9 +42,11 @@ const SignUp = () => {
 			setErrors({ confirmPassword: 'Passwords do not match. ' })
 			return
 		} else setPasswordsMatch(true)
-		const submitResponse = await register({ username, email, password })
+
+		const response = await register({ username, email, password })
 		setLoading(false)
-		const errs = submitResponse.data?.register.errors
+
+		const errs = response.data?.register.errors
 		if (errs) {
 			setSuccess(false)
 			if (errs.filter((e) => e.field === 'username').length)
@@ -62,7 +63,7 @@ const SignUp = () => {
 				})
 		} else {
 			setSuccess(true)
-			//router.push('/dashboard')
+			router.push('/dashboard')
 		}
 	}
 
@@ -80,7 +81,7 @@ const SignUp = () => {
 					confirmPassword: '',
 				}}
 				onSubmit={async (values, { setErrors }) => {
-					await handleRegistration(values, setErrors)
+					return await handleRegistration(values, setErrors)
 				}}
 			>
 				{({ isSubmitting }) => (

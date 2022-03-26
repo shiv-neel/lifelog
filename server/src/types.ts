@@ -11,5 +11,5 @@ export interface MyContext {
 }
 
 export interface CustomSessionData extends Session {
-	userId: number
+	userId: number | null
 }

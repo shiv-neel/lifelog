@@ -1,7 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react'
-import { addDoc, collection } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { useAuth } from '../utils/AuthContext'
+import { useMeQuery } from '../src/generated/graphql'
 
 const Dashboard = () => {
 	const [timeOfDay, setTimeOfDay] = useState('')
@@ -15,7 +14,7 @@ const Dashboard = () => {
 	return (
 		<Box className='mx-20 mt-10'>
 			<Heading as='h1'>
-				Good {timeOfDay}, {useAuth().currentUser?.displayName.split(' ')[0]}.
+				Good {timeOfDay}, {}.
 			</Heading>
 		</Box>
 	)

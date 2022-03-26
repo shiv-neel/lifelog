@@ -15,11 +15,19 @@ import argon from 'argon2'
 import { EntityManager } from '@mikro-orm/postgresql'
 
 @InputType()
-class UsernamePasswordInput {
+class RegisterInput {
 	@Field()
 	username: string
 	@Field()
 	email: string
+	@Field()
+	password: string
+}
+
+@InputType()
+class LoginInput {
+	@Field()
+	username: string
 	@Field()
 	password: string
 }
@@ -57,31 +65,33 @@ export class UserResolver {
 	}
 
 	@Query(() => User, { nullable: true })
-	async me(@Ctx() { req, em }: MyContext): Promise<User | null> {
-		// must make function async to have promise return type
-		const sess = req.session as CustomSessionData
-		if (!sess.userId) return null // if no userId property on the session, user not logged in
+	async me(@Ctx() { em, req }: MyContext): Promise<User | null> {
+		let sess = req.session as CustomSessionData
+		// no cookie exists (no id prop for session)
+		if (!sess.userId) return null
+		// otherwise, fetch user with id = userId
 		const user = await em.findOne(User, { id: sess.userId })
 		return user
 	}
 
 	@Mutation(() => UserResponse)
 	async register(
-		@Arg('options') options: UsernamePasswordInput,
+		@Arg('options') options: RegisterInput,
 		@Ctx() { em, req }: MyContext
-	): Promise<UserResponse> {
+	): Promise<UserResponse | undefined> {
 		const errors: FieldError[] = []
 		const existingUsername = await em.findOne(User, {
 			username: options.username.toLowerCase(),
 		})
-		if (existingUsername)
+		if (existingUsername) {
 			errors.push({
 				field: 'username',
 				message: `User with username ${options.username} already exists.`,
 			})
+		}
 
 		const existingEmail = await em.findOne(User, {
-			email: options.email.toLowerCase(),
+			email: options.email!.toLowerCase(),
 		})
 
 		if (existingEmail)
@@ -103,6 +113,7 @@ export class UserResolver {
 			})
 
 		const hashedPassword = await argon.hash(options.password)
+		if (errors.length) return { errors }
 		try {
 			const res = await (em as EntityManager)
 				.createQueryBuilder(User)
@@ -116,7 +127,7 @@ export class UserResolver {
 				})
 				.returning('*')
 			const user = res[0]
-			const sess = req.session as CustomSessionData
+			let sess = req.session as CustomSessionData
 			sess.userId = user.id
 			return { user }
 		} catch (err) {
@@ -131,7 +142,7 @@ export class UserResolver {
 
 	@Mutation(() => UserResponse)
 	async login(
-		@Arg('options') options: UsernamePasswordInput,
+		@Arg('options') options: LoginInput,
 		@Ctx() { em, req }: MyContext
 	): Promise<UserResponse> {
 		const user = await em.findOne(User, {
@@ -139,19 +150,30 @@ export class UserResolver {
 		})
 		if (!user) {
 			return {
-				errors: [{ field: 'username', message: 'username doesnt exist' }],
+				errors: [{ field: 'username', message: 'Username does not exist.' }],
 			}
 		}
 
 		const passwordIsValid = await argon.verify(user.password, options.password)
 		if (!passwordIsValid) {
 			return {
-				errors: [{ field: 'password', message: 'password is incorrect' }],
+				errors: [{ field: 'password', message: 'Password is incorrect.' }],
 			}
 		}
 
 		let sess = req.session as CustomSessionData
 		sess.userId = user.id
 		return { user }
+	}
+
+	@Mutation(() => User, { nullable: true })
+	async logout(@Ctx() { em, req }: MyContext): Promise<User | null> {
+		let sess = req.session as CustomSessionData
+		// no cookie exists (no id prop for session)
+		if (!sess.userId) return null
+		// otherwise, fetch user with id = userId
+		const user = await em.findOne(User, { id: sess.userId })
+		sess.userId = null
+		return user
 	}
 }

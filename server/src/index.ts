@@ -68,7 +68,10 @@ const main = async () => {
 	})
 
 	await apolloServer.start().catch((err) => console.error(err))
-	apolloServer.applyMiddleware({ app, cors: false })
+	apolloServer.applyMiddleware({
+		app,
+		cors: false,
+	})
 	const PORT = process.env.PORT || 4000
 	app.listen(PORT, () => {
 		console.log(`Server is listening on port ${PORT}.`)
