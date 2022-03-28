@@ -2,9 +2,7 @@ import { Box, Button, FormLabel, Heading, Input } from '@chakra-ui/react'
 import { doc, setDoc } from 'firebase/firestore'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { BsFillPauseFill, BsFillPlayFill, BsStopFill } from 'react-icons/bs'
-import { AuthContext, useAuth } from '../../../utils/AuthContext'
-import { db } from '../../../utils/Firebase'
-import { createTask } from '../../../utils/TimeLogUtils'
+import { useUser } from '../../utils/auth'
 
 const CreateLog = () => {
 	const [input, setInput] = useState<string>('')
@@ -13,7 +11,7 @@ const CreateLog = () => {
 	const [isActive, setActive] = useState<boolean>(false)
 	const [isPaused, setPaused] = useState<boolean>(true)
 	const [time, setTime] = useState<number>(0)
-	const user = useAuth().currentUser
+	const user = useUser()
 
 	useEffect(() => {
 		var interval: any
@@ -54,12 +52,10 @@ const CreateLog = () => {
 				taskname: task,
 				duration: time,
 				date: Number(new Date()),
-				uid: user.uid,
+				uid: user.id,
 			}
-			await createTask(user, taskToInject)
 		}
 	}
-
 	return (
 		<Box className='flex flex-col justify-center text-center'>
 			<FormLabel htmlFor='input'>Take control of your time!</FormLabel>

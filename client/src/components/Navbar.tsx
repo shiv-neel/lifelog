@@ -2,15 +2,12 @@ import { Button, Image } from '@chakra-ui/react'
 import Link from 'next/link'
 import { SiNotion } from 'react-icons/si'
 import { BsPlusSquare } from 'react-icons/bs'
-import { useAuth } from '../../utils/AuthContext'
 import { useState } from 'react'
 import { FaRegUserCircle } from 'react-icons/fa'
+import { useUser } from '../utils/auth'
 
-interface NavbarProps {
-	userId: number
-}
-
-const Navbar: React.FC<NavbarProps> = ({ userId }) => {
+const Navbar: React.FC = () => {
+	const user = useUser()
 	return (
 		<nav className='w-full'>
 			<ul className='flex justify-end items-center gap-10 py-12 mr-12'>
@@ -32,10 +29,10 @@ const Navbar: React.FC<NavbarProps> = ({ userId }) => {
 					<Link href='/goals'>Goals</Link>
 				</li>
 				<li>
-					{userId ? (
+					{user ? (
 						<Link href='/account' passHref>
 							<div>
-								<FaRegUserCircle className='text-4xl cursor-pointer hover:scale-105 duration-100' />
+								<FaRegUserCircle className='text-4xl cursor-pointer shadow-lg hover:scale-110 duration-100 active:scale-100' />
 							</div>
 						</Link>
 					) : (

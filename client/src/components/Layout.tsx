@@ -1,14 +1,15 @@
 import React from 'react'
+import { UserProvider } from '../utils/auth'
 import Footer from './Footer'
 import Navbar from './Navbar'
 
 const Layout: React.FC = ({ children }) => {
 	return (
-		<>
-			<Navbar userId={0} />
+		<UserProvider>
+			<Navbar />
 			{children}
 			<Footer />
-		</>
+		</UserProvider>
 	)
 }
 

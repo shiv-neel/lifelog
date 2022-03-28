@@ -31,6 +31,7 @@ export type Mutation = {
   createTask: Task;
   deleteTask: Scalars['Boolean'];
   login: UserResponse;
+  logout?: Maybe<User>;
   register: UserResponse;
   updateTaskDuration?: Maybe<Task>;
   updateTaskTitle?: Maybe<Task>;
@@ -138,7 +139,7 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string, email: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string, email: string, createdAt: string } | null };
 
 
 export const LoginDocument = gql`
@@ -184,6 +185,7 @@ export const MeDocument = gql`
     id
     username
     email
+    createdAt
   }
 }
     `;

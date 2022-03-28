@@ -7,13 +7,16 @@ import {
 	useColorMode,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { BsGithub } from 'react-icons/bs'
-import { FcGoogle } from 'react-icons/fc'
 import { MdDarkMode } from 'react-icons/md'
 import { CgSun } from 'react-icons/cg'
+import { useUser } from '../src/utils/auth'
+import { useRouter } from 'next/router'
 
 const Account = () => {
 	const [timeOfDay, setTimeOfDay] = useState('')
+	const user = useUser()
+	const router = useRouter()
+	if (!user) router.push('/login')
 	const hour = new Date().getHours()
 	useEffect(() => {
 		if (hour < 12) setTimeOfDay('Morning')
@@ -29,11 +32,14 @@ const Account = () => {
 				Account
 			</Heading>
 			<Divider className='mb-10' />
-			<ul className='flex flex-col justify-center mx-auto gap-y-4 w-80'>
-				<p className='mb-5 text-lg mx-auto'>Good {timeOfDay},</p>
+			<ul className='flex flex-col justify-center mx-auto gap-y-4 w-100'>
+				<p className='mb-5 text-lg mx-auto'>
+					Good {timeOfDay}, <strong>{user?.username}</strong>.
+				</p>
+
 				<Box className='mb-5 mx-auto space-x-3'>
 					<span>{colorMode} mode</span>{' '}
-					<Button onClick={toggleColorMode}>
+					<Button onClick={toggleColorMode} borderRadius={'50'}>
 						{colorMode === 'dark' ? (
 							<MdDarkMode className='text-xl' />
 						) : (
@@ -41,9 +47,12 @@ const Account = () => {
 						)}
 					</Button>
 				</Box>
-
+				<p>
+					You've committed to bettering yourself since{' '}
+					{new Date(Number(user?.createdAt)).toLocaleDateString()}.
+				</p>
 				<Button
-					className='gap-2 p-5 mt-5 text-xl w-56 items-center'
+					className='gap-2 p-5 mt-2 text-xl w-56 items-center'
 					variant={'ghost'}
 					//onClick={logout}
 				>
